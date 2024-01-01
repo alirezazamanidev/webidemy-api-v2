@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger"
 import { IsNotEmpty, IsString, Matches } from "class-validator"
 
 
-export class LoginDTO{
+export class SendOtpDto{
     @ApiProperty({name:'fullname',example:"Alireza Zamani",type:String,required:true,
     description:'نام کامل کاربر را وارد کنید!'})
     @IsNotEmpty({message:"فیلد نام کامل نمی تواند خالی باشد!"})
