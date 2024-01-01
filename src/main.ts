@@ -3,12 +3,29 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import SwaggerConfig from './config/swagger.config';
 import { getGlobalFilters } from './common/exceptions';
+import { HttpStatus, Logger, ValidationPipe } from '@nestjs/common';
+import ValidationException from './common/exceptions/validation.exception';
+import { ValidationError } from 'class-validator';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   SwaggerConfig(app);
+
   const httpAdapter = app.get(HttpAdapterHost);
   app.useGlobalFilters(...getGlobalFilters(httpAdapter));
-  await app.listen(process.env.PORT);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      skipMissingProperties: true,
+      exceptionFactory: (errors: ValidationError[]) => {
+        const messages: object[] = errors.map(err => ({
+          [err.property]: Object.values(err.constraints),
+        }));
+        return new ValidationException(messages);
+      }
+    })
+  )
+  await app.listen(process.env.APP_PORT,()=>{
+    console.log(`run > ${process.env.APP_TYPE}://${process.env.APP_HOST}:${process.env.APP_PORT}`)
+  });
 }
 bootstrap();

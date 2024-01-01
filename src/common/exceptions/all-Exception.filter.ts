@@ -13,9 +13,12 @@ export class AllExceptionFilter implements ExceptionFilter {
     constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
     catch(exception: unknown, host: ArgumentsHost): void {
       const { httpAdapter } = this.httpAdapterHost;
+      
+      
       const ctx = host.switchToHttp();
       let httpStatus: number, message: string;
       if (exception instanceof HttpException) {
+         
         httpStatus = exception.getStatus();
         message = exception.message;
       } else {

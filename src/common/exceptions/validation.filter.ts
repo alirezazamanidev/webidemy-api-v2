@@ -18,7 +18,10 @@ import {
       let statusCode: HttpStatus;
       let errorMessage: ErrorType;
       let invalidParams: ErrorType;
+  
       if (exception instanceof HttpException) {
+        
+        
         statusCode = exception.getStatus();
         errorMessage = exception.message;
   
