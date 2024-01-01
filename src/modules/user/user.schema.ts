@@ -7,8 +7,6 @@ class otpSchema {
   code:string
   @Prop({type:Number,required:true})
   expireIn:number
-  @Prop({type:Boolean,default:false})
-  used:boolean
 }
 @Schema({ versionKey: false, timestamps: { createdAt: true } })
 export class User {

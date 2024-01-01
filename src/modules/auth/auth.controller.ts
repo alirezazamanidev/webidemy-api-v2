@@ -3,6 +3,7 @@ import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiOkResponse, ApiTags } f
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dtos/login.dto';
 import { ContentType, SwaggerTags } from 'src/common/enums/swagger.enum';
+import { AuthMessage } from './auth.message';
 
 @ApiTags(SwaggerTags.AUTHORIZATION)
 @Controller('auth')
@@ -16,7 +17,13 @@ export class AuthController {
     @ApiBadRequestResponse({status:HttpStatus.BAD_REQUEST,description:'bad request'})
     @Post('/send-otp')
     async sendOtp(@Body() userDTO:LoginDTO ){
-        
+        const data=await this.authService.sendOtp(userDTO);
+
+        return {
+            statusCode:HttpStatus.OK,
+            message:AuthMessage.SendOtpSuccessFuylly,
+            data
+        }
         
     }
 
