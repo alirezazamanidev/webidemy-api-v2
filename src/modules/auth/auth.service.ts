@@ -54,11 +54,15 @@ export class AuthService {
     const user = await this.checkExistUserByPhone(phone);
     const now = new Date().getTime();
     // check otp code
+    
     if (user.otp.expireIn < now)
       throw new BadRequestException(AuthMessage.OtpCodeExpired);
     if (user.otp.code !== code)
       throw new BadRequestException(AuthMessage.OtpCodeIsIncorrect);
+    if(user.otp.code===code&& user.otp.used) throw new BadRequestException(AuthMessage.ALREADYUSEDCODE);
     if (!user.active) user.active = true;
+    if(!user.otp.used) user.otp.used=true;
+    await user.save();
     //create access token & refresh token
     const tokens=await this.generateToken(user);
     return tokens;
