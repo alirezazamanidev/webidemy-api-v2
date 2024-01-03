@@ -7,6 +7,7 @@ export enum ContentType {
 export enum SwaggerTags {
     USER="user",
     AUTHORIZATION="Authorization",
+    ADMIN_PANEL='AdminPanel'
     
 }
 export enum SwaggerAuth {

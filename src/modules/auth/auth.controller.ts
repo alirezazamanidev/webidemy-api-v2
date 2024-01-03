@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiForbiddenResponse, ApiHeader, ApiHeaders, ApiOkResponse, ApiProperty, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiForbiddenResponse, ApiHeader, ApiHeaders, ApiOkResponse, ApiOperation, ApiProperty, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import {  SendOtpDto } from './dtos/send-otp-dto';
 import { ContentType, SwaggerTags } from 'src/common/enums/swagger.enum';
@@ -17,6 +17,7 @@ export class AuthController {
 
     @HttpCode(HttpStatus.OK)
     @ApiConsumes(ContentType.URL_ENCODED,ContentType.JSON)
+    @ApiOperation({summary:'login user and get one time Password',tags:[SwaggerTags.AUTHORIZATION]})
     @ApiOkResponse({status:HttpStatus.OK,description:'ارسال کد یک بار مصرف'})
     @ApiBadRequestResponse({status:HttpStatus.BAD_REQUEST,description:'bad request'})
     @Post('/send-otp')
@@ -30,7 +31,9 @@ export class AuthController {
         
     }
     @ApiConsumes(ContentType.URL_ENCODED,ContentType.JSON)
+    
     @ApiOkResponse({status:HttpStatus.OK,description:"تایید کد یک بار مصرف"})
+    @ApiOperation({summary:'Check otp and send tokens',tags:[SwaggerTags.AUTHORIZATION]})
     @ApiBadRequestResponse({status:HttpStatus.BAD_REQUEST,description:"عدم تایید کد دریافتی"})
     @HttpCode(HttpStatus.OK)
     @Post('/check-otp')
@@ -46,6 +49,8 @@ export class AuthController {
     }
     @ApiHeader({name:'reresh_token',description:"ارسال رفرش توکن برای گرفتن اکسس توکن جدید"})
     @ApiConsumes(ContentType.URL_ENCODED,ContentType.JSON)
+    @ApiOperation({summary:'Get refresh token and send new Tokens',tags:[SwaggerTags.AUTHORIZATION]})
+
     @ApiOkResponse({status:HttpStatus.OK,description:"ارسال توکن های جدید!"})
     @ApiUnauthorizedResponse({status:HttpStatus.UNAUTHORIZED,description:"عدم اعتبار سنجی"})
     @ApiForbiddenResponse({status:HttpStatus.FORBIDDEN,description:'عدم اعتبار رفرش توکن!'})
