@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import 'src/common/utils/init_redis';
 import SwaggerConfig from './config/swagger.config';
 import { getGlobalFilters } from './common/exceptions';
-import { HttpStatus, Logger, ValidationPipe } from '@nestjs/common';
+import {  ValidationPipe } from '@nestjs/common';
 import ValidationException from './common/exceptions/validation.exception';
 import { ValidationError } from 'class-validator';
 
@@ -13,7 +13,7 @@ async function bootstrap() {
   SwaggerConfig(app);
 
   const httpAdapter = app.get(HttpAdapterHost);
-  // app.useGlobalFilters(...getGlobalFilters(httpAdapter));
+  app.useGlobalFilters(...getGlobalFilters(httpAdapter));
   app.useGlobalPipes(
     new ValidationPipe({
       skipMissingProperties: true,

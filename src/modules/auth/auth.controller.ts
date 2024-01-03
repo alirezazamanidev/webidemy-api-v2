@@ -1,11 +1,13 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiForbiddenResponse, ApiHeader, ApiHeaders, ApiOkResponse, ApiProperty, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import {  SendOtpDto } from './dtos/send-otp-dto';
 import { ContentType, SwaggerTags } from 'src/common/enums/swagger.enum';
 import { AuthMessage } from './auth.message';
 import { CheckOtpDto } from './dtos/check-otp-dto';
 import { AuthGuard } from '@nestjs/passport';
+import { GetCurrentUser } from 'src/common/decorators';
+import { PayloadRt } from './types';
 
 @ApiTags(SwaggerTags.AUTHORIZATION)
 @Controller('auth')
@@ -42,11 +44,21 @@ export class AuthController {
         }
 
     }
+    @ApiHeader({name:'reresh_token',description:"ارسال رفرش توکن برای گرفتن اکسس توکن جدید"})
+    @ApiConsumes(ContentType.URL_ENCODED,ContentType.JSON)
+    @ApiOkResponse({status:HttpStatus.OK,description:"ارسال توکن های جدید!"})
+    @ApiUnauthorizedResponse({status:HttpStatus.UNAUTHORIZED,description:"عدم اعتبار سنجی"})
+    @ApiForbiddenResponse({status:HttpStatus.FORBIDDEN,description:'عدم اعتبار رفرش توکن!'})
     @HttpCode(HttpStatus.OK)
     @UseGuards(AuthGuard('jwt-refresh'))
     @Post('/refresh')
-    async refreshToken(){
-        
+    async refreshToken(@GetCurrentUser() payload:PayloadRt){
+        const tokens=await this.authService.refreshToken(payload);
+        return {
+            statusCode:HttpStatus.OK,
+            message:AuthMessage.CREATE_NEW_ACCESS_TOKEN,
+            data:tokens
+        }
     }
 
 }

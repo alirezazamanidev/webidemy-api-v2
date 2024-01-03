@@ -12,7 +12,7 @@ class otpSchema {
 }
 @Schema({ versionKey: false, timestamps: { createdAt: true } })
 export class User {
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: false })
   fullname: string;
   @Prop({type:String,required:true})
   phone:string

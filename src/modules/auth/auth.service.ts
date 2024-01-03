@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -12,7 +13,7 @@ import { randomInt } from 'crypto';
 import { AuthMessage } from './auth.message';
 import { CheckOtpDto } from './dtos/check-otp-dto';
 import { JwtService } from '@nestjs/jwt';
-import { Tokens } from './types';
+import { PayloadRt, Tokens } from './types';
 import redisClient from 'src/common/utils/init_redis';
 import { Payload } from './types';
 @Injectable()
@@ -23,7 +24,7 @@ export class AuthService {
   ) {}
 
   async sendOtp(userDTO: SendOtpDto) {
-    const { fullname, phone } = userDTO;
+    const { phone } = userDTO;
     const user = await this.userModel.findOne({ phone });
     const now = new Date().getTime();
     const otp = {
@@ -32,7 +33,6 @@ export class AuthService {
     };
     if (!user) {
       const newUser = await this.userModel.create({
-        fullname,
         phone,
         otp,
       });
@@ -80,7 +80,6 @@ export class AuthService {
 
   private async generateToken(user: userDocument):Promise<Tokens> {
       const payload:Payload = {
-        fullname:user.fullname,
         phone: user.phone,
         id: user._id,
       };
@@ -107,8 +106,17 @@ export class AuthService {
         refresh_token: rt,
       };
   }
-  async refreshToken(Rt:string){
-    if(!Rt) throw new UnauthorizedException('')
+  async refreshToken(payload:PayloadRt){
+    const {phone}=payload;
+    console.log(payload);
+    
+    const user=await this.userModel.findOne({phone});
+    if(!user) throw new UnauthorizedException(AuthMessage.NOT_FOUNT_ACCOUNT);
+    const refreshToken=await redisClient.get(user?.id || 'key_default');
+    if(!refreshToken) throw new ForbiddenException('Access deind!');
+    const tokens=await this.generateToken(user);
+    await redisClient.SETEX(user.id,(360*60*60*12),tokens.refresh_token);
+    return tokens;
   }
   
 
