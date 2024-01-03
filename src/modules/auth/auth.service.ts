@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -11,8 +12,9 @@ import { randomInt } from 'crypto';
 import { AuthMessage } from './auth.message';
 import { CheckOtpDto } from './dtos/check-otp-dto';
 import { JwtService } from '@nestjs/jwt';
-import { Tokens } from './types/tokens.type';
+import { Tokens } from './types';
 import redisClient from 'src/common/utils/init_redis';
+import { Payload } from './types';
 @Injectable()
 export class AuthService {
   constructor(
@@ -77,9 +79,10 @@ export class AuthService {
   }
 
   private async generateToken(user: userDocument):Promise<Tokens> {
-      const payload = {
+      const payload:Payload = {
+        fullname:user.fullname,
         phone: user.phone,
-        userId: user._id,
+        id: user._id,
       };
   
  
@@ -104,7 +107,9 @@ export class AuthService {
         refresh_token: rt,
       };
   }
-
+  async refreshToken(Rt:string){
+    if(!Rt) throw new UnauthorizedException('')
+  }
   
 
   

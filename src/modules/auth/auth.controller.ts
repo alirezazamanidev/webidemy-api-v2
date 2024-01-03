@@ -1,5 +1,5 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import {  SendOtpDto } from './dtos/send-otp-dto';
 import { ContentType, SwaggerTags } from 'src/common/enums/swagger.enum';
@@ -40,6 +40,11 @@ export class AuthController {
             data:tokens
         }
 
+    }
+    @HttpCode(HttpStatus.OK)
+    @Post('/refresh')
+    async refreshToken(){
+        
     }
 
 }
