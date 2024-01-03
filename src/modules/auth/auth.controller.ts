@@ -1,10 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import {  SendOtpDto } from './dtos/send-otp-dto';
 import { ContentType, SwaggerTags } from 'src/common/enums/swagger.enum';
 import { AuthMessage } from './auth.message';
 import { CheckOtpDto } from './dtos/check-otp-dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags(SwaggerTags.AUTHORIZATION)
 @Controller('auth')
@@ -42,6 +43,7 @@ export class AuthController {
 
     }
     @HttpCode(HttpStatus.OK)
+    @UseGuards(AuthGuard('jwt-refresh'))
     @Post('/refresh')
     async refreshToken(){
         
