@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Query,
 } from '@nestjs/common';
@@ -14,6 +16,7 @@ import {
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
@@ -58,7 +61,6 @@ export class CategoryController {
     };
   }
   @ApiPaginatedResponse(CategoryModel)
-
   @ApiQuery({
     name: 'limit',
     type: Number,
@@ -71,10 +73,27 @@ export class CategoryController {
     required: false,
     description: 'Enter page with query',
   })
+  @ApiOperation({summary:'Get List of categories'})
   @HttpCode(HttpStatus.OK)
   @Get('/list')
   async listOfCategories(@Query() QueryPaginateDTO: QueryPaginateDTO):Promise<PaginatedDto<CategoryDocument>> {
     const data = await this.categoryService.listOfCategories(QueryPaginateDTO);
     return data
+  }
+  @ApiParam({
+    name:'cateId',
+    type:String,
+    required:true
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({summary:'delete one category with Id'})
+  @ApiOkResponse({status:HttpStatus.OK,description:"Success"})
+  @Delete('remove/:cateId')
+  async remove(@Param('cateId') cateId:string){
+    await this.categoryService.remove(cateId);
+    return {
+      statusCode:HttpStatus.OK,
+      message:CategoryMessages.DELETED
+    }
   }
 }

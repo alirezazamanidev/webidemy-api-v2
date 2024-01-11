@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { createCategoryDTO } from '../dtos/category.dto';
 
 import { CategoryMessages } from '../messages';
-import { PaginateModel } from 'mongoose';
+import { PaginateModel, isValidObjectId } from 'mongoose';
 import { CategoryDocument } from 'src/modules/category/category.schema';
 import { PaginatedDto, QueryPaginateDTO } from 'src/common/dtos';
 @Injectable()
@@ -30,6 +30,17 @@ export class CategoryService {
         limit:Limit,
         data:categoreis
     }
+   }
+   private async checkExist(cateId:string):Promise<CategoryDocument>{
+    if(cateId && !isValidObjectId(cateId)) throw new BadRequestException(CategoryMessages.RequestNotValid);
+    const category=await this.categoryModel.findById(cateId);
+    return category;
+   }
+   async remove(CateId:string){
+    await this.checkExist(CateId);
+    const result=await this.categoryModel.deleteOne({_id:CateId});
+    if(result.deletedCount==0) throw new InternalServerErrorException(CategoryMessages.Server_Error);
+    
    }
   
 }
