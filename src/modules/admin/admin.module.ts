@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CategoryController } from './controllers/category.controller';
 import { CategoryService } from './services/category.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import categorySchema  from '../category/category.schema';
+import { categorySchema } from '../category/category.schema';
 
 @Module({
   imports:[

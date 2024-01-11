@@ -7,11 +7,11 @@ import { getGlobalFilters } from './common/exceptions';
 import {  ValidationPipe } from '@nestjs/common';
 import ValidationException from './common/exceptions/validation.exception';
 import { ValidationError } from 'class-validator';
+import { Sum } from './common/utils/function';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   SwaggerConfig(app);
-
   const httpAdapter = app.get(HttpAdapterHost);
   // app.useGlobalFilters(...getGlobalFilters(httpAdapter));
   app.useGlobalPipes(

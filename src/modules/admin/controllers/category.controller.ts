@@ -1,11 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiConsumes, ApiCreatedResponse, ApiInternalServerErrorResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ContentType, SwaggerTags } from 'src/common/enums/swagger.enum';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiConsumes, ApiCreatedResponse, ApiInternalServerErrorResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ContentType } from 'src/common/enums/swagger.enum';
 import { createCategoryDTO } from '../dtos/category.dto';
-import { PaginatedDto } from 'src/common/dtos/Paginate.dto';
-import { categoryDocumemnt } from 'src/modules/category/category.schema';
 import { CategoryService } from '../services/category.service';
 import { CategoryMessages } from '../messages';
+import { ApiPaginatedResponse } from 'src/common/decorators';
+import { QueryPaginateDTO } from 'src/common/dtos';
 
 @ApiTags('Category(AdminPanel)')
 @Controller({
@@ -27,4 +27,18 @@ export class CategoryController {
         message:CategoryMessages.CREATED
     }
     }
+
+  @ApiQuery({name:"page",type:Number,required:false,description:'Enter page with query'})
+  @ApiQuery({name:'limit',type:Number,required:false,description:"Enrer limit query"}) 
+  @HttpCode(HttpStatus.OK)
+  @Get('/list')
+  async listOfCategories(@Query() QueryPaginateDTO:QueryPaginateDTO){
+    
+    const data=await this.categoryService.listOfCategories(QueryPaginateDTO);
+    return {
+      statusCode:HttpStatus.OK,
+      data
+    }
+  }
+  
 }
