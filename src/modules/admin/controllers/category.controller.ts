@@ -76,7 +76,7 @@ export class CategoryController {
   @ApiOperation({summary:'Get List of categories'})
   @HttpCode(HttpStatus.OK)
   @Get('/list')
-  async listOfCategories(@Query() QueryPaginateDTO: QueryPaginateDTO):Promise<PaginatedDto<CategoryDocument>> {
+  async listOfCategories(@Query() QueryPaginateDTO: QueryPaginateDTO){
     const data = await this.categoryService.listOfCategories(QueryPaginateDTO);
     return data
   }

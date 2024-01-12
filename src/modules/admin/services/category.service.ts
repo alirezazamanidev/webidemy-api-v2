@@ -1,15 +1,15 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { createCategoryDTO } from '../dtos/category.dto';
 
 import { CategoryMessages } from '../messages';
-import { PaginateModel, isValidObjectId } from 'mongoose';
+import { Model, isValidObjectId } from 'mongoose';
 import { CategoryDocument } from 'src/modules/category/category.schema';
-import { PaginatedDto, QueryPaginateDTO } from 'src/common/dtos';
+import { QueryPaginateDTO } from 'src/common/dtos';
 @Injectable()
 export class CategoryService {
 
-    constructor(@InjectModel('category') private categoryModel:PaginateModel<CategoryDocument> ){}
+    constructor(@InjectModel('category') private categoryModel:Model<CategoryDocument> ){}
     async create(categoryDTO:createCategoryDTO){
         const {title,parent}=categoryDTO;
         const category=await this.categoryModel.findOne({title});
@@ -34,13 +34,13 @@ export class CategoryService {
    private async checkExist(cateId:string):Promise<CategoryDocument>{
     if(cateId && !isValidObjectId(cateId)) throw new BadRequestException(CategoryMessages.RequestNotValid);
     const category=await this.categoryModel.findById(cateId);
+    if(!category) throw new NotFoundException(CategoryMessages.NOT_FOUNDED);
     return category;
    }
    async remove(CateId:string){
-    await this.checkExist(CateId);
+   await this.checkExist(CateId);
     const result=await this.categoryModel.deleteOne({_id:CateId});
     if(result.deletedCount==0) throw new InternalServerErrorException(CategoryMessages.Server_Error);
-    
    }
   
 }

@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-
 @Schema({versionKey:false,timestamps:{createdAt:false}})
 class otpSchema {
   @Prop({type:String,required:true})
@@ -29,3 +28,4 @@ export class User {
 }
 export type userDocument=User & mongoose.Document
 export const UserSchema = SchemaFactory.createForClass(User);
+
