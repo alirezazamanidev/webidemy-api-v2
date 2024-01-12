@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { createCategoryDTO } from '../dtos/category.dto';
+import { createCategoryDTO, updateCtegoryDTO } from '../dtos/category.dto';
 
 import { CategoryMessages } from '../messages';
 import { Model, isValidObjectId } from 'mongoose';
@@ -41,6 +41,11 @@ export class CategoryService {
    await this.checkExist(CateId);
     const result=await this.categoryModel.deleteOne({_id:CateId});
     if(result.deletedCount==0) throw new InternalServerErrorException(CategoryMessages.Server_Error);
+   }
+
+   async update(cateId:string,categoryDTO:updateCtegoryDTO){
+    await this.checkExist(cateId);
+    const result=await this.categoryModel.findByIdAndUpdate(cateId,{$set:categoryDTO});
    }
   
 }

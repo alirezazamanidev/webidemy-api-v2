@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import {
@@ -21,7 +22,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ContentType } from 'src/common/enums/swagger.enum';
-import { createCategoryDTO } from '../dtos/category.dto';
+import { createCategoryDTO, updateCtegoryDTO } from '../dtos/category.dto';
 import { CategoryService } from '../services/category.service';
 import { CategoryMessages } from '../messages';
 import { ApiPaginatedResponse } from 'src/common/decorators';
@@ -95,5 +96,18 @@ export class CategoryController {
       statusCode:HttpStatus.OK,
       message:CategoryMessages.DELETED
     }
+  }
+  @ApiOperation({summary:'Update category with id'})
+  @ApiConsumes(ContentType.URL_ENCODED,ContentType.JSON)
+  @ApiParam({name:'cateId',type:String})
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({status:HttpStatus.OK,description:'Success'})
+  @Put('/update/:cateId')
+  async update(@Param('cateId') cateId:string,@Body() categoryDTO:updateCtegoryDTO){
+  await this.categoryService.update(cateId,categoryDTO);
+  return {
+    statusCode:HttpStatus.OK,
+    message:CategoryMessages.UPDATED
+  }
   }
 }

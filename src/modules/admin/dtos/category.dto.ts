@@ -9,3 +9,8 @@ export class createCategoryDTO{
     
     parent:string
 }
+
+export class updateCtegoryDTO {
+    @ApiProperty({name:'title',type:String,required:false,description:"Enter title for update category"})
+    title:string
+}
