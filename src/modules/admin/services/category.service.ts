@@ -44,8 +44,12 @@ export class CategoryService {
    }
 
    async update(cateId:string,categoryDTO:updateCtegoryDTO){
-    await this.checkExist(cateId);
-    const result=await this.categoryModel.findByIdAndUpdate(cateId,{$set:categoryDTO});
+     await this.checkExist(cateId);
+    const result=await this.categoryModel.findByIdAndUpdate(cateId,{$set:{title:categoryDTO.title}});
+   }
+   async findOne(cateId:string):Promise<CategoryDocument>{
+    const category=await this.checkExist(cateId);
+    return category;
    }
   
 }

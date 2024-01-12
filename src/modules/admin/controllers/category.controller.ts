@@ -99,7 +99,7 @@ export class CategoryController {
   }
   @ApiOperation({summary:'Update category with id'})
   @ApiConsumes(ContentType.URL_ENCODED,ContentType.JSON)
-  @ApiParam({name:'cateId',type:String})
+  @ApiParam({name:'cateId',type:String,required:true,description:"Enter Category Id "})
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({status:HttpStatus.OK,description:'Success'})
   @Put('/update/:cateId')
@@ -109,5 +109,16 @@ export class CategoryController {
     statusCode:HttpStatus.OK,
     message:CategoryMessages.UPDATED
   }
+  }
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({status:HttpStatus.OK,description:'Success'})
+  @Get('/:cateId')
+  @ApiParam({name:'cateId',type:String,required:true,description:"Enter Category Id "})
+  async findOne(@Param('cateId') cateId:string){
+    const categoey=await this.categoryService.findOne(cateId);
+    return {
+      statusCode:HttpStatus.OK,
+      data:categoey
+    }
   }
 }
