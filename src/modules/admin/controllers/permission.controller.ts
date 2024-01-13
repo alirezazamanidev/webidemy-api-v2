@@ -65,12 +65,12 @@ export class PermissionController {
   
     }
   
-    @ApiOperation({summary:'Delete one role'})
+    @ApiOperation({summary:'Delete one permission'})
     @HttpCode(HttpStatus.OK)
-    @ApiParam({name:'roleId', description:"Enter role object id for delete!"})
-    @Delete('/remove/:roleId')
-    async remove(@Param('roleId') roleId:string){
-      await this.permissionService.remove(roleId);
+    @ApiParam({name:'perId', description:"Enter perimission object id for delete!"})
+    @Delete('/remove/:perId')
+    async remove(@Param('perId') perId:string){
+      await this.permissionService.remove(perId);
       return {
           statusCode:HttpStatus.OK,
           message:PermissionMessages.DELETED

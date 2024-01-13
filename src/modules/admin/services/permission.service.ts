@@ -41,7 +41,7 @@ export class PermissionService {
     async remove(roleId:string){
         await this.checkEsist(roleId);
         const result= await this.permissionModel.deleteOne({_id:roleId});
-       if(result.deletedCount==0) throw new InternalServerErrorException('Not updated')
+       if(result.deletedCount==0) throw new InternalServerErrorException('Not deleted!')
 
             
     }
