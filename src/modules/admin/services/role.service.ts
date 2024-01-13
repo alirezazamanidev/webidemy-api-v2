@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, InternalServerErrorException, NotFound
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
 import { RoleDocument } from 'src/common/schemas/Role.schema';
-import { createRoleDTO } from '../dtos/role.dto';
+import { createRoleDTO, updateRoleDTO } from '../dtos/role.dto';
 import { RoleMessages } from '../messages';
 import { QueryPaginateDTO } from 'src/common/dtos';
 
@@ -40,11 +40,19 @@ export class RoleService {
     }
     async remove(roleId:string){
         await this.checkEsist(roleId);
-        await this.roleModel.findByIdAndDelete(roleId);
+        const result= await this.roleModel.deleteOne({_id:roleId});
+       if(result.deletedCount==0) throw new InternalServerErrorException('Not updated')
+
             
     }
     async findOne(roleId:string):Promise<RoleDocument>{
        const role= await this.checkEsist(roleId);
        return role;
+    }
+    async update(roleID:string,roleDTO:updateRoleDTO){
+       const {title,description}=roleDTO;
+       await this.checkEsist(roleID);
+       const result=await this.roleModel.updateOne({_id:roleID},{$set:{title,description}});
+       if(result.modifiedCount==0) throw new InternalServerErrorException('Not updated')
     }
 }

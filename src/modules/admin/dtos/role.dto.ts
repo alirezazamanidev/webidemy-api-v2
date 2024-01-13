@@ -9,3 +9,11 @@ export class createRoleDTO{
     @ApiProperty({name:'description',type:String,required:false})
     description:string;
 }
+
+export class updateRoleDTO{
+    
+    @ApiProperty({name:"title",type:String,required:true})
+    title:string
+    @ApiProperty({name:'description',type:String,required:false})
+    description:string;
+}

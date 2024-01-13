@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { RoleService } from '../services/role.service';
 import {
   ApiBadRequestResponse,
   ApiConsumes,
   ApiCreatedResponse,
+  ApiHeader,
+  ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -13,7 +15,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ContentType } from 'src/common/enums';
-import { createRoleDTO } from '../dtos/role.dto';
+import { createRoleDTO, updateRoleDTO } from '../dtos/role.dto';
 import { RoleMessages } from '../messages';
 import { QueryPaginateDTO } from 'src/common/dtos';
 
@@ -87,6 +89,21 @@ export class RoleController {
     }
   }
 
-  
+  @ApiOperation({summary:"Update one role"})
+  @ApiParam({name:'roleId',description:'Enter object id for update role'})
+  @ApiOkResponse({description:'success'})
+  @ApiBadRequestResponse({description:'bad request'})
+  @ApiInternalServerErrorResponse({description:'Server Eroor!'})
+  @ApiConsumes(ContentType.URL_ENCODED,ContentType.JSON)
+  @HttpCode(HttpStatus.OK)
+  @Patch('/update/:roleId')
+  async update(@Body() roleDTO:updateRoleDTO,@Param('roleId') roleId:string){
+    await this.RoleService.update(roleId,roleDTO);
+    return {
+        statusCode:HttpStatus.OK,
+        message:RoleMessages.UPDATED
+    }
+
+  }
 
 }
