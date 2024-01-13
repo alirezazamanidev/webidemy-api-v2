@@ -35,14 +35,14 @@ export class PermissionController {
       }
     }
   
-    @ApiOperation({summary:'Get list of roles'})
+    @ApiOperation({summary:'Get list of perimssion'})
     @ApiQuery({name:'limit',type:String,required:false})
     @ApiQuery({name:'page',type:String,required:false})
     @ApiOkResponse({description:'success'})
     @HttpCode(HttpStatus.OK)
     @Get('/list')
-    async listofRoles(@Query() QueryPaginateDTO:QueryPaginateDTO){
-      const data=await this.permissionService.listofRoles(QueryPaginateDTO);
+    async listofPermission(@Query() QueryPaginateDTO:QueryPaginateDTO){
+      const data=await this.permissionService.listofPermission(QueryPaginateDTO);
       return {
           statusCode:HttpStatus.OK,
           data

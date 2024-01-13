@@ -25,7 +25,7 @@ export class PermissionService {
         if(!newPermission) throw new InternalServerErrorException(PermissionMessages.NOT_SAVED);
         return newPermission;
     }
-    async listofRoles(QueryPaginateDTO:QueryPaginateDTO){
+    async listofPermission(QueryPaginateDTO:QueryPaginateDTO){
         const {page,limit}=QueryPaginateDTO;
         let Page= parseInt(page) || 1;
         let Limit = parseInt(limit) || 8;
