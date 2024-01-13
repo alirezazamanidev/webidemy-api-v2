@@ -3,6 +3,8 @@ import { Document, Types } from "mongoose";
 
 @Schema({timestamps:true})
 class Permission {
+    @Prop({type:Types.ObjectId,ref:'role'})
+    role:string
     @Prop({type:String,required:true})
     name:string
     @Prop({type:String,default:''})

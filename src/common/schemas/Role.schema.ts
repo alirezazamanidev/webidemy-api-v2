@@ -7,9 +7,6 @@ class Role {
     title:string
     @Prop({type:String,default:''})
     description:string
-    
-    @Prop({type:[Types.ObjectId],ref:'permission',default:[]})
-    permissions:[]
 }
 export const RoleSchema=SchemaFactory.createForClass(Role);
 export type RoleDocument=Role & Document;

@@ -7,14 +7,20 @@ import { AdminController } from './controllers/admin.controller';
 import { APP_GUARD } from '@nestjs/core';
 import { RoleGuard } from 'src/common/guards/Role.guard';
 import { AuthGuard } from '@nestjs/passport';
+import { RoleController } from './controllers/role.controller';
+import { RoleService } from './services/role.service';
+import { RoleSchema } from 'src/common/schemas/Role.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'category', schema: categorySchema }]),
+    MongooseModule.forFeature([{ name: 'category', schema: categorySchema },{
+      name:'role',schema:RoleSchema
+    }]),
   ],
-  controllers: [CategoryController, AdminController],
+  controllers: [CategoryController, AdminController, RoleController],
   providers: [
     CategoryService,
+    RoleService,
    
   ],
 })
