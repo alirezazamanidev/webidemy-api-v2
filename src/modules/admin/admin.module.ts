@@ -10,12 +10,13 @@ import { AuthGuard } from '@nestjs/passport';
 import { RoleController } from './controllers/role.controller';
 import { RoleService } from './services/role.service';
 import { RoleSchema } from 'src/common/schemas/Role.schema';
+import { PermissionSchema } from 'src/common/schemas/permission.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'category', schema: categorySchema },{
       name:'role',schema:RoleSchema
-    }]),
+    },{name:'permission',schema:PermissionSchema}]),
   ],
   controllers: [CategoryController, AdminController, RoleController],
   providers: [

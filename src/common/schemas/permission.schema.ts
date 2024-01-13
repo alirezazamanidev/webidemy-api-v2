@@ -11,5 +11,5 @@ class Permission {
     description:string
     
 }
-export const RoleSchema=SchemaFactory.createForClass(Permission);
-export type RoleDocument=Permission & Document;
+export const PermissionSchema=SchemaFactory.createForClass(Permission);
+export type PermissionDocument=Permission & Document;
