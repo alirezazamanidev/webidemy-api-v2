@@ -1,10 +1,11 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { RoleService } from '../services/role.service';
 import {
   ApiBadRequestResponse,
   ApiConsumes,
   ApiCreatedResponse,
   ApiOperation,
+  ApiParam,
   ApiQuery,
   ApiServiceUnavailableResponse,
   ApiTags,
@@ -53,6 +54,18 @@ export class RoleController {
         data
     }
 
+  }
+
+  @ApiOperation({summary:'Delete one role'})
+  @HttpCode(HttpStatus.OK)
+  @ApiParam({name:'roleId', description:"Enter role object id for delete!"})
+  @Delete('/remove/:roleId')
+  async remove(@Param('roleId') roleId:string){
+    await this.RoleService.remove(roleId);
+    return {
+        statusCode:HttpStatus.OK,
+        message:RoleMessages.DELETED
+    }
   }
 
 }

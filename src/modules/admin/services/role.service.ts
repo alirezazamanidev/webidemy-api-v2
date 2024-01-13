@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, isValidObjectId } from 'mongoose';
 import { RoleDocument } from 'src/common/schemas/Role.schema';
 import { createRoleDTO } from '../dtos/role.dto';
 import { RoleMessages } from '../messages';
@@ -11,6 +11,12 @@ export class RoleService {
 
     constructor(@InjectModel('role') private roleModel:Model<RoleDocument>){}
 
+    private async checkEsist(roleId:string){
+        if(roleId && !isValidObjectId(roleId)) throw new BadRequestException(RoleMessages.RequestNotValid);
+        const role=await this.roleModel.findById(roleId);
+        if(!role) throw new NotFoundException(RoleMessages.NOT_FOUNDED);
+        return role;
+    }
     async create(roleDTO:createRoleDTO){
         const {title,description}=roleDTO;
         const role=await this.roleModel.findOne({title});
@@ -31,5 +37,10 @@ export class RoleService {
             limit:Limit,
             data:roles
         }
+    }
+    async remove(roleId:string){
+        await this.checkEsist(roleId);
+        await this.roleModel.findByIdAndDelete(roleId);
+            
     }
 }
