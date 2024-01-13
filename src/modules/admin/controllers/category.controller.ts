@@ -79,7 +79,10 @@ export class CategoryController {
   @Get('/list')
   async listOfCategories(@Query() QueryPaginateDTO: QueryPaginateDTO){
     const data = await this.categoryService.listOfCategories(QueryPaginateDTO);
-    return data
+    return {
+      statusCode:HttpStatus.OK,
+      data
+    }
   }
   @ApiParam({
     name:'cateId',

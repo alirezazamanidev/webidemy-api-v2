@@ -1,16 +1,18 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
 import { RoleService } from '../services/role.service';
 import {
   ApiBadRequestResponse,
   ApiConsumes,
   ApiCreatedResponse,
   ApiOperation,
+  ApiQuery,
   ApiServiceUnavailableResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { ContentType } from 'src/common/enums';
 import { createRoleDTO } from '../dtos/role.dto';
-import { RoleMessages } from '../messages/role.message';
+import { RoleMessages } from '../messages';
+import { QueryPaginateDTO } from 'src/common/dtos';
 
 @ApiTags('RBAC(AdminPanel)')
 @Controller({
@@ -39,4 +41,18 @@ export class RoleController {
         message:RoleMessages.CREATED
     }
   }
+  @ApiOperation({summary:'Get list of roles'})
+  @ApiQuery({name:'limit',type:String,required:false})
+  @ApiQuery({name:'page',type:String,required:false})
+  @HttpCode(HttpStatus.OK)
+  @Get('/list')
+  async listofRoles(@Query() QueryPaginateDTO:QueryPaginateDTO){
+    const data=await this.RoleService.listofRoles(QueryPaginateDTO);
+    return {
+        statusCode:HttpStatus.OK,
+        data
+    }
+
+  }
+
 }
