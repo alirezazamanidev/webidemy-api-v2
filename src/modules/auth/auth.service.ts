@@ -81,6 +81,7 @@ export class AuthService {
   private async generateToken(user: userDocument):Promise<Tokens> {
       const payload:Payload = {
         phone: user.phone,
+        role:user.role,
         id: user._id,
       };
   
@@ -88,7 +89,7 @@ export class AuthService {
       const [at, rt] = await Promise.all([
         this.JwtService.sign(payload, {
           secret: process.env.ACCESS_TOKEN_SECRET_KEY,
-          expiresIn: '5m',
+          expiresIn: '6h',
         }),
         this.JwtService.sign(
           payload,
