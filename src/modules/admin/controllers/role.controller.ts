@@ -4,6 +4,8 @@ import {
   ApiBadRequestResponse,
   ApiConsumes,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -42,9 +44,11 @@ export class RoleController {
         message:RoleMessages.CREATED
     }
   }
+
   @ApiOperation({summary:'Get list of roles'})
   @ApiQuery({name:'limit',type:String,required:false})
   @ApiQuery({name:'page',type:String,required:false})
+  @ApiOkResponse({description:'success'})
   @HttpCode(HttpStatus.OK)
   @Get('/list')
   async listofRoles(@Query() QueryPaginateDTO:QueryPaginateDTO){
@@ -52,6 +56,21 @@ export class RoleController {
     return {
         statusCode:HttpStatus.OK,
         data
+    }
+
+  }
+  @ApiOperation({summary:'Get One Role with object Id'})
+  @ApiParam({name:'roleId',type:String, description:'Enter object id for get role'})
+  @ApiOkResponse({status:HttpStatus.OK,description:'success'})
+  @ApiBadRequestResponse({status:HttpStatus.BAD_REQUEST,description:'bad request!'})
+  @ApiNotFoundResponse({status:HttpStatus.NOT_FOUND,description:'Not Founded!'})
+  @HttpCode(HttpStatus.OK)
+  @Get(':roleId')
+  async findOne(@Param('roleId') roleId:string){
+    
+    return {
+        statusCode:HttpStatus.OK,
+        data:await this.RoleService.findOne(roleId)
     }
 
   }
@@ -67,5 +86,7 @@ export class RoleController {
         message:RoleMessages.DELETED
     }
   }
+
+  
 
 }
