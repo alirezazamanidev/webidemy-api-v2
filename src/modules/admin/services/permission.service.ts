@@ -10,11 +10,11 @@ import { QueryPaginateDTO } from 'src/common/dtos';
 export class PermissionService {
     constructor(@InjectModel('permission') private permissionModel:Model<PermissionDocument>){}
 
-    private async checkEsist(roleId:string){
-        if(roleId && !isValidObjectId(roleId)) throw new BadRequestException(PermissionMessages.RequestNotValid);
-        const role=await this.permissionModel.findById(roleId,{_id:0,__v:0});
-        if(!role) throw new NotFoundException(PermissionMessages.NOT_FOUNDED);
-        return role;
+    private async checkEsist(perId:string){
+        if(perId && !isValidObjectId(perId)) throw new BadRequestException(PermissionMessages.RequestNotValid);
+        const permission=await this.permissionModel.findById(perId,{_id:0,__v:0});
+        if(!permission) throw new NotFoundException(PermissionMessages.NOT_FOUNDED);
+        return permission;
     }
     async create(permissionDTO:createPermissionDTO){
         const {name,description,role}=permissionDTO;
@@ -30,12 +30,12 @@ export class PermissionService {
         let Page= parseInt(page) || 1;
         let Limit = parseInt(limit) || 8;
         let skip = (Page - 1) * Limit;
-        const roles=await this.permissionModel.find({},{__v:0,id:0}).skip(skip)
+        const permissions=await this.permissionModel.find({},{__v:0,id:0}).skip(skip)
         .limit(Limit)
         return {
             page:Page,
             limit:Limit,
-            data:roles
+            data:permissions
         }
     }
     async remove(roleId:string){
@@ -45,9 +45,9 @@ export class PermissionService {
 
             
     }
-    async findOne(roleId:string):Promise<PermissionDocument>{
-       const role= await this.checkEsist(roleId);
-       return role;
+    async findOne(perId:string):Promise<PermissionDocument>{
+       const permission= await this.checkEsist(perId);
+       return permission;
     }
     async update(roleID:string,roleDTO:updatePermissionDTO){
        const {title,description}=roleDTO;

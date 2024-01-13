@@ -50,17 +50,17 @@ export class PermissionController {
   
     }
     @ApiOperation({summary:'Get One Role with object Id'})
-    @ApiParam({name:'roleId',type:String, description:'Enter object id for get role'})
+    @ApiParam({name:'perId',type:String, description:'Enter object id for get permission'})
     @ApiOkResponse({status:HttpStatus.OK,description:'success'})
     @ApiBadRequestResponse({status:HttpStatus.BAD_REQUEST,description:'bad request!'})
     @ApiNotFoundResponse({status:HttpStatus.NOT_FOUND,description:'Not Founded!'})
     @HttpCode(HttpStatus.OK)
-    @Get(':roleId')
-    async findOne(@Param('roleId') roleId:string){
+    @Get(':perId')
+    async findOne(@Param('perId') perId:string){
       
       return {
           statusCode:HttpStatus.OK,
-          data:await this.permissionService.findOne(roleId)
+          data:await this.permissionService.findOne(perId)
       }
   
     }
