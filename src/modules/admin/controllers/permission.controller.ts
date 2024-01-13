@@ -49,7 +49,7 @@ export class PermissionController {
       }
   
     }
-    @ApiOperation({summary:'Get One Role with object Id'})
+    @ApiOperation({summary:'Get One permission with object Id'})
     @ApiParam({name:'perId',type:String, description:'Enter object id for get permission'})
     @ApiOkResponse({status:HttpStatus.OK,description:'success'})
     @ApiBadRequestResponse({status:HttpStatus.BAD_REQUEST,description:'bad request!'})
@@ -77,16 +77,16 @@ export class PermissionController {
       }
     }
   
-    @ApiOperation({summary:"Update one role"})
-    @ApiParam({name:'roleId',description:'Enter object id for update role'})
+    @ApiOperation({summary:"Update one permission"})
+    @ApiParam({name:'perId',description:'Enter object id for update permission'})
     @ApiOkResponse({description:'success'})
     @ApiBadRequestResponse({description:'bad request'})
     @ApiInternalServerErrorResponse({description:'Server Eroor!'})
     @ApiConsumes(ContentType.URL_ENCODED,ContentType.JSON)
     @HttpCode(HttpStatus.OK)
-    @Patch('/update/:roleId')
-    async update(@Body() roleDTO:updatePermissionDTO,@Param('roleId') roleId:string){
-      await this.permissionService.update(roleId,roleDTO);
+    @Patch('/update/:perId')
+    async update(@Body() roleDTO:updatePermissionDTO,@Param('perId') perId:string){
+      await this.permissionService.update(perId,roleDTO);
       return {
           statusCode:HttpStatus.OK,
           message:PermissionMessages.UPDATED

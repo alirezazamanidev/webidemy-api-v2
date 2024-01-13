@@ -17,7 +17,7 @@ export class updatePermissionDTO{
     
     @ApiProperty({name:"name",type:String,required:true})
 
-    title:string
+    name:string
     @ApiProperty({name:'description',type:String,required:false})
     description:string;
    

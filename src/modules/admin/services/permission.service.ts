@@ -50,9 +50,9 @@ export class PermissionService {
        return permission;
     }
     async update(roleID:string,roleDTO:updatePermissionDTO){
-       const {title,description}=roleDTO;
+       const {name,description}=roleDTO;
        await this.checkEsist(roleID);
-       const result=await this.permissionModel.updateOne({_id:roleID},{$set:{title,description}});
+       const result=await this.permissionModel.updateOne({_id:roleID},{$set:{name,description}});
        if(result.modifiedCount==0) throw new InternalServerErrorException('Not updated')
     }
 }
