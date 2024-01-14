@@ -15,6 +15,8 @@ export class Course extends Document {
     price:string
     @Prop({type:String,default:'free'}) // vip,free,cash
     type:string
+    @Prop({type:[String],default:[]})
+    tags:string[]
     @Prop({type:String,required:true})
     photo:string
     @Prop({type:String,default:'00:00:00'})
