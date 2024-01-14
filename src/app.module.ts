@@ -6,8 +6,9 @@ import { UserModule } from './modules/user/user.module';
 import { CategoryModule } from './modules/category/category.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { CaslModule } from './modules/casl/casl.module';
+import { CourseModule } from './modules/course/course.module';
 
 @Module({
-  imports: [MongooseModule.forRoot(getMongoURL()), AuthModule, AdminModule, CaslModule],
+  imports: [MongooseModule.forRoot(getMongoURL()), AuthModule, AdminModule, CaslModule, CourseModule],
 })
 export class AppModule {}

@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
 import mongoose, {Document,Types} from "mongoose";
 
 
-@Schema({timestamps:true,id:false,versionKey:false})
+@Schema({timestamps:true,id:false,versionKey:false,toJSON:{virtuals:true}})
 export class Category extends Document  {
     @Prop({type:String,required:true})
     title:string
