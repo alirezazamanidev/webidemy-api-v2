@@ -4,13 +4,23 @@ import { SwaggerTags } from 'src/common/enums/swagger.enum';
 
 export default function SwaggerConfig(app: INestApplication) {
   const config = new DocumentBuilder()
+  .addSecurity('access_token',{
+    type:'http',
+    scheme:'bearer',
+    bearerFormat:'JWT',
+    name:'access_token',
+    in:'header'
+  })
     .setTitle('Webidemy Api')
 
     .setContact('alireza', null, 'alirezazamanidev80@gmail.com')
     .setDescription('The Webidemy api document!')
     .setVersion('1.0')
-    .addTag(SwaggerTags.AUTHORIZATION,"Auth user")
-    .addTag(SwaggerTags.ADMIN_PANEL,"Admin panel for create,Get,delete,update actions")
+    .addTag(SwaggerTags.AUTHORIZATION, 'Auth user')
+    .addTag(
+      SwaggerTags.ADMIN_PANEL,
+      'Admin panel for create,Get,delete,update actions',
+    )
 
     .build();
   const document = SwaggerModule.createDocument(app, config, {});

@@ -3,7 +3,7 @@ import mongoose, {Document,Types} from "mongoose";
 
 
 @Schema({timestamps:true,id:false,versionKey:false})
-class Category  {
+export class Category extends Document  {
     @Prop({type:String,required:true})
     title:string
     @Prop({type:Types.ObjectId,ref:'category',required:false})

@@ -19,22 +19,25 @@ import {
   ApiOperation,
   ApiParam,
   ApiQuery,
+  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 import { ContentType } from 'src/common/enums/swagger.enum';
 import { createCategoryDTO, updateCtegoryDTO } from '../dtos/category.dto';
 import { CategoryService } from '../services/category.service';
 import { CategoryMessages } from '../messages';
-import { ApiPaginatedResponse } from 'src/common/decorators';
+import { ApiPaginatedResponse, CheckPolicie } from 'src/common/decorators';
 import { PaginatedDto, QueryPaginateDTO } from 'src/common/dtos';
-import { CategoryDocument, CategoryModel, categorySchema } from 'src/modules/category/category.schema';
-
+import { Category, CategoryDocument, CategoryModel, categorySchema } from 'src/modules/category/category.schema';
+import { Action } from 'src/common/enums';
+@ApiSecurity('access_token')
 @ApiTags('Category(AdminPanel)')
 @Controller({
   path: 'admin/category',
 })
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
+  @CheckPolicie(Action.Create,Category)
   @ApiConsumes(ContentType.URL_ENCODED, ContentType.JSON)
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
@@ -61,6 +64,7 @@ export class CategoryController {
       message: CategoryMessages.CREATED,
     };
   }
+  @CheckPolicie(Action.Read,Category)
   @ApiPaginatedResponse(CategoryModel)
   @ApiQuery({
     name: 'limit',
@@ -89,6 +93,7 @@ export class CategoryController {
     type:String,
     required:true
   })
+  @CheckPolicie(Action.Delete,Category)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({summary:'delete one category with Id'})
   @ApiOkResponse({status:HttpStatus.OK,description:"Success"})
@@ -100,6 +105,7 @@ export class CategoryController {
       message:CategoryMessages.DELETED
     }
   }
+  @CheckPolicie(Action.Update,Category)
   @ApiOperation({summary:'Update category with id'})
   @ApiConsumes(ContentType.URL_ENCODED,ContentType.JSON)
   @ApiParam({name:'cateId',type:String,required:true,description:"Enter Category Id "})
@@ -113,6 +119,7 @@ export class CategoryController {
     message:CategoryMessages.UPDATED
   }
   }
+  @CheckPolicie(Action.Read,Category)
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({status:HttpStatus.OK,description:'Success'})
   @Get('/:cateId')

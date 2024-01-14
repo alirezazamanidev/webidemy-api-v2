@@ -10,7 +10,7 @@ class otpSchema {
   used:boolean
 }
 @Schema({ versionKey: false, timestamps: { createdAt: true } })
-export class User {
+export class User extends mongoose.Document {
   @Prop({ type: String, required: false })
   fullname: string;
   @Prop({type:String,required:true})
