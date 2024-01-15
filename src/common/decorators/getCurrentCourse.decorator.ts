@@ -9,12 +9,7 @@ export const GetCurrentCourse=createParamDecorator(
 
         const ctx=context.switchToHttp();
         const req=ctx.getRequest()
-         const courseDTO = new createCourseDTO({
-           ...req.body,
-            photo: req.file,
-            userId: req.user?._id,
-          });
-          
-        return courseDTO;
+  
+        return {...req.body,photo:req.file,userId:req?.user?._id};
     }
 )

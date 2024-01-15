@@ -3,9 +3,10 @@ import { User, userDocument } from "../user/user.schema";
 import { Action, Role } from "src/common/enums";
 import { Category } from "../category/category.schema";
 import { Injectable } from "@nestjs/common";
+import { Course } from "../course/course.schema";
 
 
-export type Subjects = InferSubjects<typeof Category | typeof User> | 'all';
+export type Subjects = InferSubjects<typeof Category | typeof User | typeof Course> | 'all';
 type PossibleAbilities = [Action, Subjects];
 type Conditions = MongoQuery;
 
@@ -34,7 +35,7 @@ export class CaslAbilityFactory {
                 can([Action.Create,Action.Read,Action.Update],'Blogs');
                 break;
             case Role.TEACHER:
-                can([Action.Create,Action.Read,Action.Update],'Courses');
+                can([Action.Create,Action.Read,Action.Update],Course);
                 break;
             default:
                 cannot(Action.Manage,'all');
