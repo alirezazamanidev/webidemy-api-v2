@@ -9,8 +9,8 @@ export class createCourseDTO{
     @ApiProperty({name:'title',type:String,required:true})
     @IsNotEmpty({message:'فیلد عنوان نمی تواند خالی بماند!'})
     title:string
-    @ApiProperty({name:'short_text',type:String,required:true})
     @IsNotEmpty({message:'فیلد متن کوتاه دوره نمی تواند خالی بماند'})
+    @ApiProperty({name:'short_text',type:String,required:false})
     short_text:string
     @ApiProperty({name:'text',type:String,required:true})
     @IsNotEmpty({message:'فیلد متن اصلی سایت نمی تواند خالی بماند!'})
@@ -30,4 +30,12 @@ export class createCourseDTO{
     @ApiProperty({name:'photo',type:'string',format:'binary',required:true})
     @IsNotEmpty({message:'فیلد تصویره دوره نمیتواند خالی بماند!'})   
     photo:Express.Multer.File;
+
+    constructor(data:Partial<createCourseDTO>){
+        Object.assign(this,data);
+    }
+
+    validationAsync(){
+        
+    }
 }

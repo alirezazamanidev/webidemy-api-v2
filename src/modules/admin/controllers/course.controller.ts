@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { createCourseDTO } from '../dtos/course.dto';
 import { Action, ContentType } from 'src/common/enums';
@@ -24,6 +24,8 @@ export class CourseController {
     @HttpCode(HttpStatus.CREATED)
     @Post('/create')
     async create(@GetCurrentCourse() courseDTO:createCourseDTO){
+
+        return courseDTO;
         await this.courseService.create(courseDTO);
        return {
         statusCode:201,

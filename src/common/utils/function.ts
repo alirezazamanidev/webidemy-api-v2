@@ -1,3 +1,5 @@
+import { existsSync, unlinkSync } from "fs";
+import { join } from "path";
 
 export function StringToArray(data:string |string[]){
 
@@ -20,5 +22,12 @@ export function StringToArray(data:string |string[]){
         return data;
     }else {
         return [];
+    }
+}
+
+export function deleteFileInPublic(fileAddress:string) {
+    if (fileAddress) {
+        const pathFile =join(__dirname, "..", "..","..", "public", fileAddress)
+        if (existsSync(pathFile)) unlinkSync(pathFile)
     }
 }

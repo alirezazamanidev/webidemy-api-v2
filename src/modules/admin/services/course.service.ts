@@ -33,7 +33,7 @@ export class CourseService {
       title,
       short_text,
       text,
-      category: new Types.ObjectId(category),
+      category,
       photo: image,
       tags: allTags,
       price: type === 'free' ? 0 : price,
