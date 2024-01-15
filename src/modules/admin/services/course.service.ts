@@ -67,6 +67,11 @@ export class CourseService {
       throw new InternalServerErrorException('Not Deleted!');
   }
 
+  async findOne(courseId:string):Promise<Course>{
+    return await this.checkExist(courseId);
+
+  }
+
   private async checkExist(courseId: string) {
     if (courseId && !isValidObjectId(courseId))
       throw new BadRequestException(CourseMessages.RequestNotValid);
@@ -74,6 +79,8 @@ export class CourseService {
     if (!course) throw new NotFoundException(CourseMessages.NOT_FOUND);
     return course;
   }
+
+
   private getUrlPhoto(dir: string) {
     return dir.substring(8);
   }
