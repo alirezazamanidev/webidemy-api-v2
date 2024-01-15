@@ -6,6 +6,7 @@ import { createCourseDTO } from '../dtos/course.dto';
 import { parse } from 'path';
 import { StringToArray } from 'src/common/utils/function';
 import { CourseMessages } from '../messages';
+import { QueryPaginateDTO } from 'src/common/dtos';
 
 @Injectable()
 export class CourseService {
@@ -43,7 +44,22 @@ export class CourseService {
     if(!newCourse) throw new InternalServerErrorException('Not Saved!');
     
   }
-  getUrlPhoto(dir: string) {
+  async ListOfCourses(QueryPaginateDTO:QueryPaginateDTO){
+    const {page,limit}=QueryPaginateDTO;
+    let Page= parseInt(page) || 1;
+    let Limit = parseInt(limit) || 8;
+    let skip = (Page - 1) * Limit;
+   
+    
+    const courses=await this.courseModel.find({}).skip(skip)
+    .limit(Limit)
+    return {
+        page:Page,
+        limit:Limit,
+        data:courses
+    }
+  }
+  private getUrlPhoto(dir: string) {
     return dir.substring(8);
   }
 }
