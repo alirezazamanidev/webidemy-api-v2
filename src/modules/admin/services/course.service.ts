@@ -12,7 +12,7 @@ import { parse } from 'path';
 import { StringToArray } from 'src/common/utils/function';
 import { CourseMessages } from '../messages';
 import { QueryPaginateDTO } from 'src/common/dtos';
-
+import slugify from 'slugify';
 @Injectable()
 export class CourseService {
   constructor(@InjectModel('course') private courseModel: Model<Course>) {}
@@ -20,6 +20,7 @@ export class CourseService {
   async create(courseDTO: createCourseDTO) {
     const {
       userId,
+      slug,
       title,
       short_text,
       category,
@@ -27,15 +28,17 @@ export class CourseService {
       tags,
       photo,
       price,
+      
       type,
     } = courseDTO;
-    const course = await this.courseModel.findOne({ title });
+    const course = await this.courseModel.findOne({ slug });
     if (course) throw new BadRequestException(CourseMessages.ALREADY_EXIST);
     const image = this.getUrlPhoto(`${photo.destination}/${photo.filename}`);
     const allTags = StringToArray(tags);
     const newCourse = await this.courseModel.create({
       teacher: new Types.ObjectId(userId),
       title,
+      slug:slug ? slug : slugify(title),
       short_text,
       text,
       category: new Types.ObjectId(category),

@@ -9,6 +9,8 @@ export class createCourseDTO{
     @ApiProperty({name:'title',type:String,required:true})
     @IsNotEmpty({message:'فیلد عنوان نمی تواند خالی بماند!'})
     title:string
+    @ApiProperty({name:'slug',type:String,required:false,description:'You can Enter slug for course'})
+    slug:string
     @IsNotEmpty({message:'فیلد متن کوتاه دوره نمی تواند خالی بماند'})
     @ApiProperty({name:'short_text',type:String,required:false})
     short_text:string

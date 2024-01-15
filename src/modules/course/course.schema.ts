@@ -7,8 +7,12 @@ export class Course extends Document {
     teacher:string
     @Prop({type:Types.ObjectId,ref:"category",required:true})
     category:string
+    @Prop({type:Boolean,default:false})
+    IsPublished:boolean
     @Prop({type:String,required:true})
     title:string
+    @Prop({type:String,required:true})
+    slug:string
     @Prop({type:String,required:true})
     short_text:string
     @Prop({type:String,default:0})
