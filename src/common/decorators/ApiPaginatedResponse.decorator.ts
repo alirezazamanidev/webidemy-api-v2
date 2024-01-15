@@ -4,8 +4,6 @@ import { PaginatedDto } from '../dtos/Paginate.dto';
 import { CategoryModel } from 'src/modules/category/category.schema';
 
 export const ApiPaginatedResponse = <TModel extends Type<any>>(model: TModel) => {
-  console.log(model);
-
   return applyDecorators(
     ApiExtraModels(PaginatedDto, model),
     ApiOkResponse({

@@ -33,11 +33,5 @@ export class createCourseDTO{
     @IsNotEmpty({message:'فیلد تصویره دوره نمیتواند خالی بماند!'})   
     photo:Express.Multer.File;
 
-    constructor(data:Partial<createCourseDTO>){
-        Object.assign(this,data);
-    }
 
-    validationAsync(){
-        
-    }
 }

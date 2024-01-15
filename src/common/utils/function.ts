@@ -26,8 +26,10 @@ export function StringToArray(data:string |string[]){
 }
 
 export function deleteFileInPublic(fileAddress:string) {
+    
     if (fileAddress) {
-        const pathFile =join(__dirname, "..", "..","..", "public", fileAddress)
+        const pathFile =join(__dirname, "..", "..","..",'public' ,fileAddress)
+       
         if (existsSync(pathFile)) unlinkSync(pathFile)
     }
 }

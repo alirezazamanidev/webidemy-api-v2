@@ -9,12 +9,20 @@ import {
   import { Response } from 'express';
   import { ErrorResponse, ErrorType } from 'src/common/types/pulic.type';
   import ValidationException from './validation.exception';
+import { deleteFileInPublic } from '../utils/function';
   
   @Catch(ValidationException)
   export default class ValidationFilter implements ExceptionFilter {
     catch(exception: ValidationException, host: ArgumentsHost) {
       const ctx = host.switchToHttp();
       const res: Response = ctx.getResponse<Response>();
+     const req=ctx.getRequest()
+     // delete image if validation error
+     if(req.file){
+       deleteFileInPublic(req.file.path.substring(7));
+      
+     }
+      
       let statusCode: HttpStatus;
       let errorMessage: ErrorType;
       let invalidParams: ErrorType;

@@ -109,7 +109,6 @@ export class AuthService {
   }
   async refreshToken(payload:PayloadRt){
     const {phone}=payload;
-    console.log(payload);
     
     const user=await this.userModel.findOne({phone});
     if(!user) throw new UnauthorizedException(AuthMessage.NOT_FOUNT_ACCOUNT);

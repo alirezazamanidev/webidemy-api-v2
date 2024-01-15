@@ -7,6 +7,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
+import { deleteFileInPublic } from '../utils/function';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -16,6 +17,12 @@ export class AllExceptionFilter implements ExceptionFilter {
       
       
       const ctx = host.switchToHttp();
+      const req=ctx.getRequest()
+      // delete image if validation error
+      if(req.file){
+        deleteFileInPublic(req.file.path.substring(7));
+       
+      }
       let httpStatus: number, message: string;
       
       if (exception instanceof HttpException) {
@@ -33,7 +40,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         errors: {
           path: httpAdapter.getRequestUrl(ctx.getRequest()),
           message,
-          invalidParams: [],
+          data: [],
         },
       };
       
