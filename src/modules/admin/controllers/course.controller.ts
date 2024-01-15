@@ -1,5 +1,5 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ApiBody, ApiConsumes, ApiOperation, ApiQuery, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query, UploadedFile, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { createCourseDTO } from '../dtos/course.dto';
 import { Action, ContentType } from 'src/common/enums';
 import { ApiPaginatedResponse, CheckPolicie, GetCurrentCourse } from 'src/common/decorators';
@@ -48,7 +48,7 @@ export class CourseController {
         required: false,
         description: 'Enter page with query',
       })
-      // @UsePipes(new TransformData())
+     
       @HttpCode(HttpStatus.OK)
       @Get('/list')
       async listOfCourses(@Query() QueryPaginateDTO:QueryPaginateDTO){
@@ -58,5 +58,18 @@ export class CourseController {
             data:await this.courseService.ListOfCourses(QueryPaginateDTO)
         }
       }
-   
+   @CheckPolicie(Action.Delete,Course)
+   @ApiOkResponse({status:HttpStatus.OK,description:'Success'})
+   @ApiBadRequestResponse({status:HttpStatus.BAD_REQUEST,description:'Bad Request!'})
+   @ApiInternalServerErrorResponse({status:HttpStatus.INTERNAL_SERVER_ERROR,description:"Server error"})
+   @ApiParam({name:'courseId',type:String,description:'Enter object id for delete course!'})
+   @Delete('/remove/:courseId')
+   async remove(@Param('courseId') courseId:string){
+     await this.courseService.remove(courseId);
+     return {
+      statusCode:HttpStatus.OK,
+      message:CourseMessages.DELETED
+     }
+
+   }
 }
