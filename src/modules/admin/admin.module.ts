@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import {  Module } from '@nestjs/common';
 import { CategoryController } from './controllers/category.controller';
 import { CategoryService } from './services/category.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -10,7 +10,6 @@ import { CaslModule } from '../casl/casl.module';
 import { courseSchema } from '../course/course.schema';
 import { CourseController } from './controllers/course.controller';
 import { CourseService } from './services/course.service';
-
 @Module({
   imports: [
     CaslModule,
@@ -33,4 +32,6 @@ import { CourseService } from './services/course.service';
   ],
   providers: [CategoryService, CourseService],
 })
-export class AdminModule {}
+export class AdminModule  {
+
+}

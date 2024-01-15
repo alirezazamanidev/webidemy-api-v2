@@ -6,9 +6,11 @@ import SwaggerConfig from './config/swagger.config';
 import { getGlobalFilters } from './common/exceptions';
 import {  ValidationPipe } from '@nestjs/common';
 import ValidationException from './common/exceptions/validation.exception';
+import * as bodyParser from 'body-parser';
 import { ValidationError } from 'class-validator';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   SwaggerConfig(app);
   const httpAdapter = app.get(HttpAdapterHost);
   // app.useGlobalFilters(...getGlobalFilters(httpAdapter));
