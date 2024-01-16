@@ -6,16 +6,18 @@ import SwaggerConfig from './config/swagger.config';
 import { getGlobalFilters } from './common/exceptions';
 import { ValidationPipeErorr } from './common/pips';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   SwaggerConfig(app);
   const httpAdapter = app.get(HttpAdapterHost);
   
-  app.useGlobalFilters(...getGlobalFilters(httpAdapter));
+  // app.useGlobalFilters(...getGlobalFilters(httpAdapter));
   app.useGlobalPipes(
     new ValidationPipeErorr()
   )
+  app.use(cookieParser());
   app.useStaticAssets('public')
   await app.listen(process.env.APP_PORT,()=>{
     console.log(`run > ${process.env.APP_TYPE}://${process.env.APP_HOST}:${process.env.APP_PORT}`)

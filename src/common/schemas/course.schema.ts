@@ -1,6 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+@Schema({timestamps:true,versionKey:false,id:false})
+class Episode extends Document {
+  @Prop({type:String,required:true})
+  title:string
+  @Prop({type:String,default:''})
+  text:string
+  @Prop({type:String,required:true}) // free , vip ,cash
+  type:string
+  @Prop({type:String,required:true})
+  videoAddress:string
+}
 
+@Schema({timestamps:true,versionKey:false,id:false})
+class Chapter extends Document {
+  @Prop({type:String,required:true})
+  title:string
+  @Prop({type:String,default:''})
+  text:string
+  @Prop({type:[Episode],default:[]})
+  episodes:Episode[]
+}
 @Schema({ timestamps: true, versionKey: false, id: false ,toJSON:{virtuals:true}})
 export class Course extends Document {
   @Prop({ type: Types.ObjectId, ref: 'user', required: true })
@@ -25,8 +45,8 @@ export class Course extends Document {
   photo: string;
   @Prop({ type: String, default: '00:00:00' })
   time: string;
-  @Prop({ type: [], default: [] })
-  chapters: [];
+  @Prop({ type: [Chapter], default: [] })
+  chapters: [Chapter];
   @Prop({ type: [Types.ObjectId], default: [] })
   students: string;
   @Prop({ type: Number, default: 0 })

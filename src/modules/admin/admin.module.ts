@@ -9,6 +9,8 @@ import { courseSchema } from '../../common/schemas';
 import { CourseController } from './controllers/course.controller';
 import { CourseService } from './services/course.service';
 import { UserSchema } from '../../common/schemas';
+import { ChapterController } from './controllers/chapter.controller';
+import { ChapterService } from './services/chapter.service';
 @Module({
   imports: [
     CaslModule,
@@ -26,8 +28,9 @@ import { UserSchema } from '../../common/schemas';
     CategoryController,
     AdminController,
     CourseController,
+    ChapterController,
   ],
-  providers: [CategoryService, CourseService],
+  providers: [CategoryService, CourseService, ChapterService],
 })
 export class AdminModule  {
 

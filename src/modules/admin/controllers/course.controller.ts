@@ -122,6 +122,8 @@ export class CourseController {
 
   @CheckPolicie(Action.Read,Course)
   @ApiOperation({summary:'edit course '})
+  @ApiOkResponse({status:HttpStatus.OK,description:'Success'})
+  @ApiBadRequestResponse({status:HttpStatus.BAD_REQUEST,description:'Bad request'})
   @ApiConsumes(ContentType.MULTIPART)
   @ApiBody({ type: updateCourseDTO })
   @UploadFile('photo')

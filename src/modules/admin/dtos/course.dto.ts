@@ -2,6 +2,7 @@ import { BadRequestException } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, Matches } from "class-validator";
 import {PartialType} from '@nestjs/mapped-types'
+import { Type } from "src/common/enums";
 
 export class createCourseDTO{
    
@@ -21,7 +22,7 @@ export class createCourseDTO{
     @IsNotEmpty({message:'فیلد دسته بندی نمی تواند خالی بماند!'})
     @Matches(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i,{message:'مقدار فیلد دسته بندی وارد شده صحیح نیست'})
     category:string
-    @ApiProperty({name:'type',enum:['vip','free','cash'],required:true})
+    @ApiProperty({name:'type',enum:Type,required:true})
     @IsNotEmpty({message:'فیلد تایپ نمی تواند خالی بماند!'})
     type:string
     @ApiProperty({name:'price',type:String,required:false,default:0})
