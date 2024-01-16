@@ -7,9 +7,9 @@ import {
 
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types, isValidObjectId } from 'mongoose';
-import { Course } from 'src/modules/course/course.schema';
+import { Course } from 'src/common/schemas';
 import { createCourseDTO, updateCourseDTO } from '../dtos/course.dto';
-import { parse } from 'path';
+
 import { StringToArray, deleteFileInPublic } from 'src/common/utils/function';
 import { CourseMessages } from '../messages';
 import { QueryPaginateDTO } from 'src/common/dtos';
@@ -59,7 +59,10 @@ export class CourseService {
     let Limit = parseInt(limit) || 8;
     let skip = (Page - 1) * Limit;
 
-    const courses = await this.courseModel.find({}).skip(skip).limit(Limit);
+    const courses = await this.courseModel.find({}).populate([{
+      path:'category',
+      select:['title']
+    }]).skip(skip).limit(Limit);
     return {
       page: Page,
       limit: Limit,
@@ -79,8 +82,6 @@ export class CourseService {
     const { photo,tags } = courseDTO;
     const course = await this.checkExist(courseId);
     let image='';
-    console.log(photo);
-    
     if(photo){
       deleteFileInPublic(course.photo);
       image=this.getUrlPhoto(`${photo.destination}/${photo.filename}`);

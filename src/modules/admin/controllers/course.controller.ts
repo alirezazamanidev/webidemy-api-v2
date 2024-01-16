@@ -9,10 +9,6 @@ import {
   Patch,
   Post,
   Query,
-  UploadedFile,
-  UseInterceptors,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -24,7 +20,6 @@ import {
   ApiOperation,
   ApiParam,
   ApiQuery,
-  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 import { createCourseDTO, updateCourseDTO } from '../dtos/course.dto';
@@ -35,10 +30,10 @@ import {
   GetCurrentCourse,
 } from 'src/common/decorators';
 import { UploadFile } from 'src/common/decorators/uploadFile.decorator';
-import { Course } from 'src/modules/course/course.schema';
+import { Course } from 'src/common/schemas';
 import { CourseService } from '../services/course.service';
 import { CourseMessages } from '../messages';
-import { PaginatedDto, QueryPaginateDTO } from 'src/common/dtos';
+import { QueryPaginateDTO } from 'src/common/dtos';
 @ApiTags('Course(AdminPanel)')
 @Controller({
   path: '/admin/course',

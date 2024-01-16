@@ -9,7 +9,6 @@ export class Category extends Document  {
     @Prop({type:Types.ObjectId,ref:'category',required:false})
     parent:string
 }
-export type CategoryDocument=Category & Document;
 export const categorySchema=SchemaFactory.createForClass(Category);
 
 categorySchema.virtual('children',{
@@ -28,4 +27,3 @@ function autoPopulate(next:any){
 }
 
 categorySchema.pre('find',autoPopulate).pre('findOne',autoPopulate)
-export const CategoryModel=mongoose.model('category',categorySchema);

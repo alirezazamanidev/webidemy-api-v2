@@ -1,9 +1,9 @@
 import {  AbilityBuilder, ExtractSubjectType, InferSubjects, MongoAbility, MongoQuery, createMongoAbility } from "@casl/ability";
 import { User, userDocument } from "../user/user.schema";
 import { Action, Role } from "src/common/enums";
-import { Category } from "../category/category.schema";
+import { Category } from "../../common/schemas/category.schema";
 import { Injectable } from "@nestjs/common";
-import { Course } from "../course/course.schema";
+import { Course } from "../../common/schemas/course.schema";
 
 
 export type Subjects = InferSubjects<typeof Category | typeof User | typeof Course> | 'all';

@@ -4,12 +4,13 @@ import { createCategoryDTO, updateCtegoryDTO } from '../dtos/category.dto';
 
 import { CategoryMessages } from '../messages';
 import { Model, isValidObjectId } from 'mongoose';
-import { CategoryDocument } from 'src/modules/category/category.schema';
+
 import { QueryPaginateDTO } from 'src/common/dtos';
+import { Category } from 'src/common/schemas';
 @Injectable()
 export class CategoryService {
 
-    constructor(@InjectModel('category') private categoryModel:Model<CategoryDocument> ){}
+    constructor(@InjectModel('category') private categoryModel:Model<Category> ){}
     async create(categoryDTO:createCategoryDTO){
         const {title,parent}=categoryDTO;
         const category=await this.categoryModel.findOne({title});
@@ -31,7 +32,7 @@ export class CategoryService {
         data:categoreis
     }
    }
-   private async checkExist(cateId:string):Promise<CategoryDocument>{
+   private async checkExist(cateId:string):Promise<Category>{
     if(cateId && !isValidObjectId(cateId)) throw new BadRequestException(CategoryMessages.RequestNotValid);
     const category=await this.categoryModel.findById(cateId);
     if(!category) throw new NotFoundException(CategoryMessages.NOT_FOUNDED);
@@ -47,7 +48,7 @@ export class CategoryService {
      await this.checkExist(cateId);
     const result=await this.categoryModel.findByIdAndUpdate(cateId,{$set:{title:categoryDTO.title}});
    }
-   async findOne(cateId:string):Promise<CategoryDocument>{
+   async findOne(cateId:string):Promise<Category>{
     const category=await this.checkExist(cateId);
     return category;
    }

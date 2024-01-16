@@ -10,7 +10,7 @@ async function bootstrap() {
 
   SwaggerConfig(app);
   const httpAdapter = app.get(HttpAdapterHost);
-  app.useGlobalFilters(...getGlobalFilters(httpAdapter));
+  // app.useGlobalFilters(...getGlobalFilters(httpAdapter));
   app.useGlobalPipes(
     new ValidationPipeErorr()
   )

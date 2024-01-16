@@ -27,8 +27,8 @@ import { createCategoryDTO, updateCtegoryDTO } from '../dtos/category.dto';
 import { CategoryService } from '../services/category.service';
 import { CategoryMessages } from '../messages';
 import { ApiPaginatedResponse, CheckPolicie } from 'src/common/decorators';
-import { PaginatedDto, QueryPaginateDTO } from 'src/common/dtos';
-import { Category, CategoryDocument, CategoryModel, categorySchema } from 'src/modules/category/category.schema';
+import { QueryPaginateDTO } from 'src/common/dtos';
+import { Category } from 'src/common/schemas';
 import { Action } from 'src/common/enums';
 @ApiSecurity('access_token')
 @ApiTags('Category(AdminPanel)')
@@ -65,7 +65,7 @@ export class CategoryController {
     };
   }
   @CheckPolicie(Action.Read,Category)
-  @ApiPaginatedResponse(CategoryModel)
+  @ApiPaginatedResponse(Category)
   @ApiQuery({
     name: 'limit',
     type: Number,

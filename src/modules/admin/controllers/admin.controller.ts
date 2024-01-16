@@ -11,7 +11,7 @@ import { Auth } from 'src/common/decorators/Auth.decorator';
 import { CheckPolicie } from 'src/common/decorators/CheckPolicie.decorator';
 import { Action } from 'src/common/enums';
 import { SwaggerTags } from 'src/common/enums/swagger.enum';
-import { Category } from 'src/modules/category/category.schema';
+import { Category } from 'src/common/schemas/category.schema';
 
 @ApiTags(SwaggerTags.ADMIN_PANEL)
 @Controller('admin')
