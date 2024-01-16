@@ -37,7 +37,9 @@ export class createCourseDTO{
 }
 
 
-export class updateCourseDTO extends PartialType(createCourseDTO) {
+export class updateCourseDTO  {
+    userId:string
+
     @ApiProperty({name:'title',type:String,required:false})
     title:string
     @ApiProperty({name:'slug',type:String,required:false,description:'You can Enter slug for course'})
@@ -48,6 +50,7 @@ export class updateCourseDTO extends PartialType(createCourseDTO) {
     text:string
     @ApiProperty({name:'category',type:String,required:false,description:'Object Id category!'})
     @Matches(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i,{message:'مقدار فیلد دسته بندی وارد شده صحیح نیست'})
+    
     category:string
     @ApiProperty({name:'type',enum:['vip','free','cash'],required:false})
     type:string

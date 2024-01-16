@@ -128,12 +128,17 @@ export class CourseController {
   @CheckPolicie(Action.Read,Course)
   @ApiOperation({summary:'edit course '})
   @ApiConsumes(ContentType.MULTIPART)
+  @ApiBody({ type: updateCourseDTO })
+  @UploadFile('photo')
   @ApiParam({name:'courseId',type:String,description:"Enter object id for update course!"})
   @HttpCode(HttpStatus.OK)
   @Patch('/update/:courseId')
-  async update(@Param('courseId') courseId:string,@Body() courseDTO:updateCourseDTO){
-
-    return courseDTO;
+  async update(@Param('courseId') courseId:string,@GetCurrentCourse() courseDTO:updateCourseDTO){
+    await this.courseService.update(courseId,courseDTO);
+    return {
+      statusCode:HttpStatus.OK,
+      message:CourseMessages.UPDATED
+    }
     
   }
 }

@@ -8,7 +8,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types, isValidObjectId } from 'mongoose';
 import { Course } from 'src/modules/course/course.schema';
-import { createCourseDTO } from '../dtos/course.dto';
+import { createCourseDTO, updateCourseDTO } from '../dtos/course.dto';
 import { parse } from 'path';
 import { StringToArray, deleteFileInPublic } from 'src/common/utils/function';
 import { CourseMessages } from '../messages';
@@ -17,7 +17,7 @@ import slugify from 'slugify';
 @Injectable()
 export class CourseService {
   constructor(@InjectModel('course') private courseModel: Model<Course>) {}
-  
+
   async create(courseDTO: createCourseDTO) {
     const {
       userId,
@@ -29,34 +29,29 @@ export class CourseService {
       tags,
       photo,
       price,
-      
+
       type,
     } = courseDTO;
-    console.log();
-    
+
     const course = await this.courseModel.findOne({ slug });
     if (course) throw new BadRequestException(CourseMessages.ALREADY_EXIST);
     const image = this.getUrlPhoto(`${photo.destination}/${photo.filename}`);
-    
-    const allTags = StringToArray(tags);
-      try {
-        const newCourse = await this.courseModel.create({
-          teacher: new Types.ObjectId(userId),
-          title,
-          slug:slug ? slug : slugify(title),
-          short_text,
-          text,
-          category: new Types.ObjectId(category),
-          photo: image,
-          tags: allTags,
-          price: type === 'free' ? 0 : price,
-          type,
-        });
-      } catch (error) {
-        throw new InternalServerErrorException('Not Saved!');
-      }
 
-    
+    const allTags = StringToArray(tags);
+    const newCourse = await this.courseModel.create({
+      teacher: new Types.ObjectId(userId),
+      title,
+      slug: slug ? slug : slugify(title,'_'),
+      short_text,
+      text,
+      category: new Types.ObjectId(category),
+      photo: image,
+      tags: allTags,
+      price: type === 'free' ? 0 : price,
+      type,
+    });
+
+    if (!newCourse) throw new InternalServerErrorException('Not Saved!');
   }
   async ListOfCourses(QueryPaginateDTO: QueryPaginateDTO) {
     const { page, limit } = QueryPaginateDTO;
@@ -72,19 +67,42 @@ export class CourseService {
     };
   }
   async remove(courseId: string) {
-    const course= await this.checkExist(courseId);
-   
+    const course = await this.checkExist(courseId);
+
     // delete image photo
     deleteFileInPublic(course?.photo);
     const result = await this.courseModel.deleteOne({ _id: courseId });
     if (result.deletedCount === 0)
       throw new InternalServerErrorException('Not Deleted!');
+  }
+  async update(courseId: string, courseDTO: updateCourseDTO) {
+    const { photo,tags } = courseDTO;
+    const course = await this.checkExist(courseId);
+    let image='';
+    console.log(photo);
+    
+    if(photo){
+      deleteFileInPublic(course.photo);
+      image=this.getUrlPhoto(`${photo.destination}/${photo.filename}`);
+
+    }else {
+      image=course.photo;
+    }
+    const result = await this.courseModel.updateOne(
+      { _id: courseId },
+      {
+        $set: {
+          ...courseDTO,
+          tags:tags? StringToArray(tags):course.tags,
+          photo: image,
+        },
+      },
+    );
     
   }
 
-  async findOne(courseId:string):Promise<Course>{
+  async findOne(courseId: string): Promise<Course> {
     return await this.checkExist(courseId);
-
   }
 
   private async checkExist(courseId: string) {
@@ -94,7 +112,6 @@ export class CourseService {
     if (!course) throw new NotFoundException(CourseMessages.NOT_FOUND);
     return course;
   }
-
 
   private getUrlPhoto(dir: string) {
     return dir.substring(8);
