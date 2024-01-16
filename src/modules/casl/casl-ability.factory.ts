@@ -1,9 +1,10 @@
 import {  AbilityBuilder, ExtractSubjectType, InferSubjects, MongoAbility, MongoQuery, createMongoAbility } from "@casl/ability";
-import { User, userDocument } from "../user/user.schema";
+
 import { Action, Role } from "src/common/enums";
-import { Category } from "../../common/schemas/category.schema";
+import { Category } from "../../common/schemas";
 import { Injectable } from "@nestjs/common";
-import { Course } from "../../common/schemas/course.schema";
+import { Course } from "../../common/schemas";
+import { User } from "src/common/schemas";
 
 
 export type Subjects = InferSubjects<typeof Category | typeof User | typeof Course> | 'all';
@@ -13,7 +14,7 @@ type Conditions = MongoQuery;
 export type AppAbility = MongoAbility<PossibleAbilities, Conditions>;
 @Injectable()
 export class CaslAbilityFactory {
-    createForUser(user:userDocument){
+    createForUser(user:User){
         const { can, cannot, build } = new AbilityBuilder(createMongoAbility<PossibleAbilities, Conditions>);
        if(user?.role) this.checkCanAccess(user?.role,can,cannot);
        else cannot(Action.Manage,'all');

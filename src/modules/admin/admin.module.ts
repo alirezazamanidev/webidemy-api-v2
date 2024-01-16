@@ -2,13 +2,13 @@ import {  Module } from '@nestjs/common';
 import { CategoryController } from './controllers/category.controller';
 import { CategoryService } from './services/category.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { categorySchema } from '../../common/schemas/category.schema';
+import { categorySchema } from '../../common/schemas';
 import { AdminController } from './controllers/admin.controller';
 import { CaslModule } from '../casl/casl.module';
-import { courseSchema } from '../../common/schemas/course.schema';
+import { courseSchema } from '../../common/schemas';
 import { CourseController } from './controllers/course.controller';
 import { CourseService } from './services/course.service';
-import { User, UserSchema } from '../user/user.schema';
+import { UserSchema } from '../../common/schemas';
 @Module({
   imports: [
     CaslModule,
@@ -18,7 +18,7 @@ import { User, UserSchema } from '../user/user.schema';
       {
         name:'course', schema:courseSchema
       },{
-        name:User.name,schema:UserSchema
+        name:'user',schema:UserSchema
       }
     ]),
   ],

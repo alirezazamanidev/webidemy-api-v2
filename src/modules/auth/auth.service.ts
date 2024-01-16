@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, userDocument } from '../user/user.schema';
+
 import { SendOtpDto } from './dtos/send-otp-dto';
 import { randomInt } from 'crypto';
 import { AuthMessage } from './auth.message';
@@ -16,10 +16,11 @@ import { JwtService } from '@nestjs/jwt';
 import { PayloadRt, Tokens } from './types';
 import redisClient from 'src/common/utils/init_redis';
 import { Payload } from './types';
+import { User } from 'src/common/schemas';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel('user') private userModel: Model<User>,
     private JwtService: JwtService,
   ) {}
 
@@ -72,13 +73,13 @@ export class AuthService {
 
   private async checkExistUserByPhone(
     phone: string,
-  ): Promise<userDocument | undefined> {
+  ): Promise<User | undefined> {
     const user = await this.userModel.findOne({ phone });
     if (!user) throw new NotFoundException(AuthMessage.NotFound);
     return user;
   }
 
-  private async generateToken(user: userDocument):Promise<Tokens> {
+  private async generateToken(user: User):Promise<Tokens> {
       const payload:Payload = {
         phone: user.phone,
         role:user.role,
