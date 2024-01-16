@@ -37,7 +37,6 @@ export class CourseService {
     if (course) throw new BadRequestException(CourseMessages.ALREADY_EXIST);
     const image = this.getUrlPhoto(`${photo.destination}/${photo.filename}`);
 
-    const allTags = StringToArray(tags);
     const newCourse = await this.courseModel.create({
       teacher: new Types.ObjectId(userId),
       title,
@@ -46,7 +45,7 @@ export class CourseService {
       text,
       category: new Types.ObjectId(category),
       photo: image,
-      tags: allTags,
+      tags: StringToArray(tags),
       price: type === 'free' ? 0 : price,
       type,
     });
@@ -59,10 +58,7 @@ export class CourseService {
     let Limit = parseInt(limit) || 8;
     let skip = (Page - 1) * Limit;
 
-    const courses = await this.courseModel.find({}).populate([{
-      path:'category',
-      select:['title']
-    }]).skip(skip).limit(Limit);
+    const courses = await this.courseModel.find({}).skip(skip).limit(Limit);
     return {
       page: Page,
       limit: Limit,
@@ -99,6 +95,7 @@ export class CourseService {
         },
       },
     );
+    if(result.modifiedCount===0) throw new InternalServerErrorException('not Updated!');
     
   }
 

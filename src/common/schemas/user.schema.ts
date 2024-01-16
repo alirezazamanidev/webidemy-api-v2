@@ -28,6 +28,5 @@ export class User extends mongoose.Document {
   @Prop({type:String,default:'USER'})
   role:string
 }
-export type userDocument=User & mongoose.Document
 export const UserSchema = SchemaFactory.createForClass(User);
 

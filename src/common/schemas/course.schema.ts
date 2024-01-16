@@ -37,3 +37,16 @@ export const courseSchema = SchemaFactory.createForClass(Course);
 courseSchema.virtual('photoUrl').get(function () {
   return `${process.env.APP_TYPE}://${process.env.APP_HOST}:${process.env.APP_PORT}${this.photo}`;
 });
+
+function autoPopulate(next:any){
+
+  this.populate([{
+    path:"category",
+    select:['title']
+  },{
+    path:'teacher',
+    select:['fullname','username']
+  }])
+  next();
+}
+courseSchema.pre('find',autoPopulate).pre('findOne',autoPopulate);
