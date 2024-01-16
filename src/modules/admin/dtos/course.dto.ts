@@ -1,7 +1,7 @@
 import { BadRequestException } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, Matches } from "class-validator";
-
+import {PartialType} from '@nestjs/mapped-types'
 
 export class createCourseDTO{
    
@@ -33,5 +33,30 @@ export class createCourseDTO{
     @IsNotEmpty({message:'فیلد تصویره دوره نمیتواند خالی بماند!'})   
     photo:Express.Multer.File;
 
+
+}
+
+
+export class updateCourseDTO extends PartialType(createCourseDTO) {
+    @ApiProperty({name:'title',type:String,required:false})
+    title:string
+    @ApiProperty({name:'slug',type:String,required:false,description:'You can Enter slug for course'})
+    slug:string
+    @ApiProperty({name:'short_text',type:String,required:false})
+    short_text:string
+    @ApiProperty({name:'text',type:String,required:false})
+    text:string
+    @ApiProperty({name:'category',type:String,required:false,description:'Object Id category!'})
+    @Matches(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i,{message:'مقدار فیلد دسته بندی وارد شده صحیح نیست'})
+    category:string
+    @ApiProperty({name:'type',enum:['vip','free','cash'],required:false})
+    type:string
+    @ApiProperty({name:'price',type:String,required:false,default:0})
+    
+    price:string
+    @ApiProperty({name:'tags',type:String,required:false,description:'Enter tags with # example @tags1#tags2#tags3'})
+    tags:string | string[]
+    @ApiProperty({name:'photo',type:'string',format:'binary',required:false})
+    photo:Express.Multer.File;
 
 }

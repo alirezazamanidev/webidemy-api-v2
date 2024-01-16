@@ -27,7 +27,7 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
-import { createCourseDTO } from '../dtos/course.dto';
+import { createCourseDTO, updateCourseDTO } from '../dtos/course.dto';
 import { Action, ContentType } from 'src/common/enums';
 import {
   ApiPaginatedResponse,
@@ -123,5 +123,17 @@ export class CourseController {
       statusCode:HttpStatus.OK,
       data:await this.courseService.findOne(courseId)
     } 
+  }
+
+  @CheckPolicie(Action.Read,Course)
+  @ApiOperation({summary:'edit course '})
+  @ApiConsumes(ContentType.MULTIPART)
+  @ApiParam({name:'courseId',type:String,description:"Enter object id for update course!"})
+  @HttpCode(HttpStatus.OK)
+  @Patch('/update/:courseId')
+  async update(@Param('courseId') courseId:string,@Body() courseDTO:updateCourseDTO){
+
+    return courseDTO;
+    
   }
 }
