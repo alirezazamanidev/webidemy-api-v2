@@ -19,3 +19,12 @@ export class chapterIdParamsDTO{
     chapterId:string
 
 }
+
+export class updateChapterDTO{
+    @ApiProperty({name:'courseId',type:String,required:false,description:"Enter object id course for Add chapter"})
+    courseId:string
+    @ApiProperty({type:String,required:false})
+    title:string
+    @ApiProperty({type:String,required:false})
+    text:string;
+}

@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { chapterIdParamsDTO, createChapterDTO } from '../dtos/chapter.dto';
+import { chapterIdParamsDTO, createChapterDTO, updateChapterDTO } from '../dtos/chapter.dto';
 import { ChapterMessages } from '../messages';
 import { ChapterService } from '../services/chapter.service';
 import { Action, ContentType } from 'src/common/enums';
@@ -59,5 +59,24 @@ export class ChapterController {
             data:await this.chapterService.find(courseId)
         }
     }
+    
+    @ApiOperation({summary:'update chapter with id'})
+    @CheckPolicie(Action.Update,Course)
+    @ApiOkResponse({status:HttpStatus.OK,description:'Success'})
+    @ApiNotFoundResponse({status:HttpStatus.NOT_FOUND,description:'not Found'})
+    @ApiBadRequestResponse({status:HttpStatus.OK,description:'Bad request'})
+    @ApiConsumes(ContentType.URL_ENCODED,ContentType.JSON)
+    @ApiParam({name:'chapterId',type:String,required:true,description:'Enter object id for update chapter' })
+    @HttpCode(HttpStatus.OK)
+    @Patch('/update/:chapterId')
+    async update(@Param() {chapterId}:chapterIdParamsDTO,@Body() chapterDTo:updateChapterDTO){
+        await this.chapterService.update(chapterId,chapterDTo);
+        return {
+            statusCode:HttpStatus.OK,
+            message:ChapterMessages.UPDATED
+        }
+    }    
+
+
 
 }

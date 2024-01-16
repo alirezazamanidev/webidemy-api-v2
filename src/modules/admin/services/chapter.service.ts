@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, InternalServerErrorException, NotFound
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
 import { Course } from 'src/common/schemas';
-import { createChapterDTO } from '../dtos/chapter.dto';
+import { createChapterDTO, updateChapterDTO } from '../dtos/chapter.dto';
 import { ChapterMessages, CourseMessages } from '../messages';
 
 @Injectable()
@@ -52,5 +52,9 @@ export class ChapterService {
         if(!chapters) throw new NotFoundException(CourseMessages.NOT_FOUND);
         return chapters
       }
-    
-}
+    async update(chpaterID:string,chapterDTo:updateChapterDTO){
+        await this.findOneChapter(chpaterID);
+        const result=await this.courseModel.updateOne({'chapters._id':chpaterID},{$set:{'chapters':chapterDTo}});
+        if(result.modifiedCount===0) throw new InternalServerErrorException('Chapter not upated!');
+    }
+ }
