@@ -6,8 +6,10 @@ import { ContentType, SwaggerTags } from 'src/common/enums/swagger.enum';
 import { AuthMessage } from './auth.message';
 import { CheckOtpDto } from './dtos/check-otp-dto';
 import { AuthGuard } from '@nestjs/passport';
-import { GetCurrentUser } from 'src/common/decorators';
+import { CheckPolicie, GetCurrentUser } from 'src/common/decorators';
 import { PayloadRt } from './types';
+import { Action } from 'src/common/enums';
+import { Course } from 'src/common/schemas';
 
 @ApiTags(SwaggerTags.AUTHORIZATION)
 @Controller('auth')

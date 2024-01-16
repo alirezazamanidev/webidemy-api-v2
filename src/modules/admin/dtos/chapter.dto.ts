@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiHeader, ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, Matches } from "class-validator";
 
 export class createChapterDTO{
@@ -10,5 +10,12 @@ export class createChapterDTO{
     title:string
     @ApiProperty({type:String,required:false})
     text:string;
+
+}
+
+export class chapterIdParamsDTO{
+    
+    @Matches(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i,{message:'مقدار   ایدی وارد شده صحیح نیست'})
+    chapterId:string
 
 }
