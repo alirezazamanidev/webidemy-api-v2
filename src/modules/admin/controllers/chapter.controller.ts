@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { chapterIdParamsDTO, createChapterDTO } from '../dtos/chapter.dto';
 import { ChapterMessages } from '../messages';
@@ -43,6 +43,21 @@ export class ChapterController {
         status:HttpStatus.OK,
         message:ChapterMessages.DELETED
     }
+    }
+
+    @ApiOperation({summary:'Get Chapters of course by courseId'})
+    @CheckPolicie(Action.Read,Course)
+    @ApiOkResponse({status:HttpStatus.OK,description:'Success'})
+    @ApiNotFoundResponse({status:HttpStatus.NOT_FOUND,description:'not Found'})
+    @ApiBadRequestResponse({status:HttpStatus.OK,description:'Bad request'})
+    @ApiParam({name:'courseId',type:String,required:true,description:'Enter object id for get chapters of course' })
+    @Get('/:courseId')
+    async find(@Param('courseId') courseId:string){
+
+        return {
+            statusCode:HttpStatus.OK,
+            data:await this.chapterService.find(courseId)
+        }
     }
 
 }

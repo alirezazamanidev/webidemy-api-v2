@@ -10,6 +10,8 @@ class Episode extends Document {
   type:string
   @Prop({type:String,required:true})
   videoAddress:string
+
+
 }
 
 @Schema({timestamps:true,versionKey:false,id:false})
@@ -43,8 +45,10 @@ export class Course extends Document {
   tags: string[];
   @Prop({ type: String, required: true })
   photo: string;
+  photoURL:string
   @Prop({ type: String, default: '00:00:00' })
   time: string;
+
   @Prop({ type: [Chapter], default: [] })
   chapters: [Chapter];
   @Prop({ type: [Types.ObjectId], default: [] })

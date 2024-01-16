@@ -44,5 +44,13 @@ export class ChapterService {
         if (!course) throw new NotFoundException(CourseMessages.NOT_FOUND);
         return course;
       }
+
+      async find(courseId:string){
+        if (courseId && !isValidObjectId(courseId))
+        throw new BadRequestException(CourseMessages.RequestNotValid);
+        const chapters = await this.courseModel.findOne({_id: courseId}, {title:1,teacher:0,category:0,chapters:1})
+        if(!chapters) throw new NotFoundException(CourseMessages.NOT_FOUND);
+        return chapters
+      }
     
 }
