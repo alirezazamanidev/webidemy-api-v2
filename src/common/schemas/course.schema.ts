@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-@Schema({ timestamps: true, versionKey: false, id: false })
+@Schema({ timestamps: true, versionKey: false, id: false ,toJSON:{virtuals:true}})
 export class Course extends Document {
   @Prop({ type: Types.ObjectId, ref: 'user', required: true })
   teacher: string;
